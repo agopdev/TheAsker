@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
@@ -10,8 +11,10 @@ namespace TheAsker;
 public partial class MainPage : ContentPage
 {
     string currentAnswer;
+    int attempts = 0;
+    int points = 0;
+    int numberQuestions = 0;
     RandomNumberGenerator randomNumberGenerator;
-
     string[][] preguntasRespuestasArchivosInGame;
     string[][] preguntasRespuestasArchivos = new string[][]
     {
@@ -80,7 +83,8 @@ public partial class MainPage : ContentPage
     public MainPage()
 	{
 		InitializeComponent();
-	}
+        setInterface(false);
+    }
 
     private void ButtonNewGame_Clicked(object sender, EventArgs e)
     {
@@ -89,12 +93,37 @@ public partial class MainPage : ContentPage
 
     private void newGame() {
         randomNumberGenerator = new RandomNumberGenerator();
+        points = 0;
+        attempts = 0;
+        numberQuestions = 0;
         preguntasRespuestasArchivosInGame = preguntasRespuestasArchivos;
+        setInterface(true);
         selectAndShowRandomQuestion();
+    }
+
+    private void setInterface(bool startGame) {
+
+        if (!startGame)
+        {
+            lblImgText.IsVisible = true;
+            lblImgText.Text = "Para jugar, presione 'Nuevo juego'";
+            ButtonSendAnswer.IsVisible = false;
+            entryAnswer.IsVisible = false;
+            imgQuestion.IsVisible = false;
+        } else
+        {
+            lblImgText.IsVisible = false;
+            lblImgText.Text = "";
+            ButtonSendAnswer.IsVisible = true;
+            entryAnswer.IsVisible = true;
+            imgQuestion.IsVisible = true;
+        }
     }
 
     private void selectAndShowRandomQuestion() {
         int totalElementsInArray = preguntasRespuestasArchivosInGame.Length;
+        numberQuestions ++;
+        attempts = 0;
 
         if (totalElementsInArray>0)
         {
@@ -103,6 +132,8 @@ public partial class MainPage : ContentPage
             currentAnswer = preguntasRespuestasArchivosInGame[randomIndex][1];
             imgQuestion.Source = preguntasRespuestasArchivosInGame[randomIndex][2];
         }
+
+        updateLabelPointsAndQuestions();
     }
 
     private void entryAnswer_Completed(object sender, EventArgs e)
@@ -123,6 +154,18 @@ public partial class MainPage : ContentPage
                 message = "¡INCORRECTO!";
                 textColor = Microsoft.Maui.Graphics.Color.FromArgb("#e60000");
                 break;
+            case "win":
+                message = "¡GANASTE!";
+                textColor = Microsoft.Maui.Graphics.Color.FromArgb("#009e05");
+                endGame();
+                lblImgText.Text = "¡Felicidades!";
+                break;
+            case "lose":
+                message = "¡PERDISTE!";
+                textColor = Microsoft.Maui.Graphics.Color.FromArgb("#e60000");
+                endGame();
+                lblImgText.Text = "¡Perdiste!";
+                break;
             default:
                 message = "";
                 textColor = Microsoft.Maui.Graphics.Color.FromArgb("");
@@ -133,6 +176,15 @@ public partial class MainPage : ContentPage
         lblResult.TextColor = textColor;
         await Task.Delay(1000);
         lblResult.Text = "";
+    }
+
+    private void endGame()
+    {
+        entryAnswer.IsVisible = false;
+        ButtonSendAnswer.IsVisible = false;
+        lblImgText.IsVisible = true;
+        imgQuestion.IsVisible = false;
+        lblQuestion.Text = "";
     }
 
     async private void checkUserAnswer()
@@ -149,13 +201,50 @@ public partial class MainPage : ContentPage
 
         if (regex.IsMatch(userAnswer))
         {
+            attempts = 0;
+            points++;
             await showMessage("correct");
-            selectAndShowRandomQuestion();
+
+            if (await canContinueGame())
+            {
+                selectAndShowRandomQuestion();
+            }
         }
         else
         {
+            attempts++;
             await showMessage("wrong");
+            if (attempts >= 2)
+            {
+                if (await canContinueGame())
+                {
+                    selectAndShowRandomQuestion();
+                }
+            }
         }
+    }
+
+    private void updateLabelPointsAndQuestions()
+    {
+        lblPoints.Text = $"Puntos: {points.ToString()}";
+        lblNumberQuestion.Text = $"Pregunta No. {numberQuestions.ToString()}";
+    }
+
+    async private Task<bool> canContinueGame()
+    {
+        entryAnswer.Text = "";
+
+        if (numberQuestions >= 5 && points < 3)
+        {
+            await showMessage("lose");
+            return false;
+        } else if (numberQuestions >= 5 && points > 3)
+        {
+            await showMessage("win");
+            return false;
+        }
+
+        return true;
     }
 
     private void ButtonSendAnswer_Clicked(object sender, EventArgs e)

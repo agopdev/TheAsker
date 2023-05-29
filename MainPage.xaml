@@ -71,11 +71,13 @@
                     <RowDefinition Height=".8*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0"
-                       Text="Pregunta 1"
-                       Margin="10"></Label>
+                <Label  x:Name="lblNumberQuestion"
+                        Grid.Row="0"
+                        Text=""
+                        Margin="10"></Label>
 
-                <Label  Text="Puntos: 0"
+                <Label  x:Name="lblPoints"
+                        Text=""
                         Grid.Row="0"
                         HorizontalOptions="End"
                         Margin="10"></Label>
@@ -83,8 +85,18 @@
                 <Frame  Grid.Row="1"
                         BackgroundColor="{x:StaticResource SelectionColor}"
                         BorderColor="Transparent">
-                    <Image  x:Name="imgQuestion"
-                            Source="img.jpg"></Image>
+                    <StackLayout>
+                        <Image  x:Name="imgQuestion"
+                                Source="myImg.jpg"
+                                Aspect="Fill"
+                                WidthRequest="300"
+                                HeightRequest="180"></Image>
+                        <Label  x:Name="lblImgText"
+                                TextColor="{x:StaticResource LightFont}"
+                                FontAttributes="Bold"
+                                Text=""
+                                HorizontalOptions="Center"></Label>
+                    </StackLayout>
                 </Frame>
 
             </Grid>
