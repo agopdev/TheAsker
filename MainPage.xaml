@@ -3,4 +3,161 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TheAsker.MainPage">
 
+    <ContentPage.Resources>
+        <Color x:Key="SelectionColor">#000</Color>
+        <Color x:Key="LightFont">#f1f1f1f1</Color>
+        <Color x:Key="DarkFont">#222</Color>
+        <Color x:Key="PlaceholderColor">#999</Color>
+    </ContentPage.Resources>
+
+    <ScrollView>
+
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush
+                EndPoint="1,1">
+                    <GradientStop Offset="0.10" Color="#47033E"/>
+                    <GradientStop Offset="0.25" Color="#460025"/>
+                    <GradientStop Offset="0.50" Color="#400037"/>
+                    <GradientStop Offset="0.95" Color="#670011"/>
+
+                </LinearGradientBrush>
+            </Grid.Background>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".20*"></RowDefinition>
+                <RowDefinition Height=".40*"></RowDefinition>
+                <RowDefinition Height=".40*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0"
+              BackgroundColor="#fff">
+
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=".5*"></RowDefinition>
+                        <RowDefinition Height=".5*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width=".2*"></ColumnDefinition>
+                        <ColumnDefinition Width=".2*"></ColumnDefinition>
+                        <ColumnDefinition Width=".2*"></ColumnDefinition>
+                        <ColumnDefinition Width=".2*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Label  Text="The Asker"
+                            TextColor="{x:StaticResource DarkFont}"
+                            FontSize="25"
+                            Grid.Row="0"
+                            Grid.ColumnSpan="4"></Label>
+
+                    <Button Text="Nuevo juego"
+                            x:Name="ButtonNewGame"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Margin="10,0,0,0"
+                            TextColor="{x:StaticResource LightFont}"
+                            BackgroundColor="Green"
+                            Clicked="ButtonNewGame_Clicked"></Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1"
+              Margin="15">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".2*"></RowDefinition>
+                    <RowDefinition Height=".8*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label  x:Name="lblNumberQuestion"
+                        Grid.Row="0"
+                        Text=""
+                        Margin="10"></Label>
+
+                <Label  x:Name="lblPoints"
+                        Text=""
+                        Grid.Row="0"
+                        HorizontalOptions="End"
+                        Margin="10"></Label>
+
+                <Frame  Grid.Row="1"
+                        BackgroundColor="{x:StaticResource SelectionColor}"
+                        BorderColor="Transparent">
+                    <StackLayout>
+                        <Image  x:Name="imgQuestion"
+                                Source="myImg.jpg"
+                                Aspect="Fill"
+                                WidthRequest="300"
+                                HeightRequest="180"></Image>
+                        <Label  x:Name="lblImgText"
+                                TextColor="{x:StaticResource LightFont}"
+                                FontAttributes="Bold"
+                                Text=""
+                                HorizontalOptions="Center"></Label>
+                    </StackLayout>
+                </Frame>
+
+            </Grid>
+            <Grid Grid.Row="2"
+              Margin="15">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=".6*"></RowDefinition>
+                    <RowDefinition Height=".2*"></RowDefinition>
+                    <RowDefinition Height=".2*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Frame  Grid.Row="0"
+                        VerticalOptions="Start"
+                        BackgroundColor="White"
+                        BorderColor="Transparent">
+                    <StackLayout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=".6*"></RowDefinition>
+                                <RowDefinition Height=".4*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            
+                            <Label  x:Name="lblQuestion"
+                                    Text="..."
+                                    TextColor="{x:StaticResource DarkFont}"
+                                    HeightRequest="60"
+                                    WidthRequest="300"
+                                    Grid.Row="0"></Label>
+
+                            <Label x:Name="lblResult"
+                                   Text=""
+                                   TextColor="Green"
+                                   VerticalOptions="Start"
+                                   HorizontalOptions="Center"
+                                   FontSize="Title"
+                                   Grid.Row="1"></Label>
+
+                        </Grid>
+
+                    </StackLayout>
+                </Frame>
+                <Entry  x:Name="entryAnswer"
+                        Grid.Row="1"
+                        Placeholder="Ingrese su respuesta..."
+                        PlaceholderColor="{x:StaticResource PlaceholderColor}"
+                        TextColor="{x:StaticResource DarkFont}"
+                        Completed="entryAnswer_Completed"
+                        BackgroundColor="White"></Entry>
+
+                <Button x:Name="ButtonSendAnswer"
+                        Grid.Row="2"
+                        Text="Aceptar"
+                        TextColor="{x:StaticResource LightFont}"
+                        BackgroundColor="#156"
+                        Clicked="ButtonSendAnswer_Clicked"></Button>
+
+            </Grid>
+
+
+        </Grid>
+    </ScrollView>
+
 </ContentPage>
